@@ -1,0 +1,92 @@
+// Get the display element
+let display = document.getElementById('display');
+let currentNumber = '';
+let previousNumber = '';
+let currentOperation = '';
+// Function to append a number to the display
+function appendNumber(num) {
+ // Append the number to the current number
+ currentNumber += num.toString();
+ display.value = currentNumber;
+}
+
+// Function to append an operator to the display
+function appendOperator(operator) {
+ // Store the current number and set the operation
+ previousNumber = currentNumber;
+ currentNumber = '';
+ currentOperation = operator;
+ display.value = previousNumber + operator;
+}
+
+// Function to append a decimal point to the display
+function appendDecimal() {
+ // Check if the current number already includes a decimal point
+ if (!currentNumber.includes('.')) {
+ // If not, append a decimal point to the current number
+ currentNumber += '.';
+ display.value = previousNumber + currentOperation + currentNumber;
+ }
+}
+
+// Function to calculate the result of the expression
+function calculate() {
+ try {
+ // Calculate the result based on the operation
+ let result;
+ switch (currentOperation) {
+ case '+':
+ result = parseFloat(previousNumber) + parseFloat(currentNumber);
+ break;
+ case '-':
+ result = parseFloat(previousNumber) - parseFloat(currentNumber);
+ break;
+case '*':
+ result = parseFloat(previousNumber) * parseFloat(currentNumber);
+ break;
+ case '/':
+ if (currentNumber === '0') {
+ throw new Error('Division by zero');
+ } else {
+ result = parseFloat(previousNumber) / parseFloat(currentNumber);
+ }
+break;
+ default:
+ result = '';
+ }
+ // Display the result
+ display.value = result.toString();
+ currentNumber = result.toString();
+ previousNumber = '';
+ currentOperation = '';
+ } catch (error) {
+// If an error occurs, display an error message
+ display.value = 'Error';
+ currentNumber = '';
+ previousNumber = '';
+ currentOperation = '';
+ }
+}
+// Function to clear the display
+function clearDisplay() {
+ // Reset the display value and variables
+ display.value = '';
+ currentNumber = '';
+ previousNumber = '';
+ currentOperation = '';
+}
+
+// Function to delete the last character from the display
+function deleteLast() {
+ // Remove the last character from the current number
+ if (currentNumber.length > 0) {
+ currentNumber = currentNumber.slice(0, -1);
+ display.value = previousNumber + currentOperation + currentNumber;
+ } else if (currentOperation.length > 0) {
+ currentOperation = '';
+ display.value = previousNumber;
+ } else if (previousNumber.length > 0) {
+ previousNumber = previousNumber.slice(0, -1);
+display.value = previousNumber;
+ }
+}
